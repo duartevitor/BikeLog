@@ -1,0 +1,26 @@
+<!-- A DrawerLayout is intended to be used as the top-level content view using match_parent for both width and height to consume the full space available. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/main_layout"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    style="@style/AlertDialog.AppCompat.Light">
+
+    <!-- As the main content view, the view below consumes the entire
+ -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="ticks"
+        android:id="@+id/txtTick"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SMS"
+        android:id="@+id/buttonSMS"
+        android:layout_gravity="center_horizontal" />
+</LinearLayout>

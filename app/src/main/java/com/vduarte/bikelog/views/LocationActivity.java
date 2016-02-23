@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -14,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.vduarte.bikelog.R;
 
@@ -28,7 +32,9 @@ import org.w3c.dom.Text;
 
 import static com.google.android.gms.location.LocationServices.*;
 
-public class LocationActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class LocationActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
 
     public static final int REQUEST_GOOGLE_PLAY_SERVICES = 1972;
 
@@ -39,8 +45,21 @@ public class LocationActivity extends AppCompatActivity implements GoogleApiClie
 
     private LocationManager mLocationManager;
 
+    // boolean flag to toggle periodic location updates
+    private boolean mRequestingLocationUpdates = false;
+
+    private LocationRequest mLocationRequest;
+
+    // Location updates intervals in sec
+    private static int UPDATE_INTERVAL = 10000; // 10 sec
+    private static int FATEST_INTERVAL = 5000; // 5 sec
+    private static int DISPLACEMENT = 10; // 10 meters
+
     private TextView tvLat;
     private TextView tvLon;
+
+    private Button btnShowLoc;
+    private Button btnLocUpdates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,19 +68,45 @@ public class LocationActivity extends AppCompatActivity implements GoogleApiClie
         setContentView(R.layout.activity_location);
 
         tvLat = ((TextView) findViewById(R.id.tvLat));
-        tvLat.setText("Location Text");
+        tvLat.setText("Lat:");
 
         tvLon = ((TextView) findViewById(R.id.tvLon));
-        tvLon.setText("Go");
+        tvLon.setText("Lon:");
 
-       this.mLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        btnShowLoc = (Button) findViewById(R.id.btnShowLoc);
+        btnLocUpdates = (Button) findViewById(R.id.btnLocUpdates);
+
+        // get location manager to check on GPS
+        this.mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         // First we need to check availability of play services
         if (checkPlayServices()) {
 
             // Building the GoogleApi client
             buildGoogleApiClient();
+
+            // create location request
+            createLocationRequest();
         }
+
+        // click to show current location
+        btnShowLoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                displayLocation();
+            }
+        });
+
+        // Location Updates Button
+        btnLocUpdates
+                .setText("Start Loc Updates");
+        btnLocUpdates.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                togglePeriodicLocationUpdates();
+            }
+        });
     }
 
     @Override
@@ -76,8 +121,8 @@ public class LocationActivity extends AppCompatActivity implements GoogleApiClie
     protected void onResume() {
         super.onResume();
 
-        if(checkPlayServices() ){
-            if(mGoogleApiClient.isConnected())
+        if (checkPlayServices()) {
+            if (mGoogleApiClient.isConnected())
                 displayLocation();
             else
                 mGoogleApiClient.connect();
@@ -121,30 +166,122 @@ public class LocationActivity extends AppCompatActivity implements GoogleApiClie
      * */
     private void displayLocation() {
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
-            Log.d("PERMISSION","NO PERMISSION!");
+            Log.d("PERMISSION", "NO PERMISSION!");
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+
+            tvLat.setText("Not Available");
+            tvLon.setText("Not Available");
+
             return;
         }
-        mLastLocation = FusedLocationApi
-                .getLastLocation(mGoogleApiClient);
 
-        if (mLastLocation != null) {
-            double latitude = mLastLocation.getLatitude();
-            double longitude = mLastLocation.getLongitude();
+        // if gps is not connected ask for gps
+        // TODO create alert here with yes/No to start gps...
+        if(!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Intent gpsOptionsIntent = new Intent(
+                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 
-            tvLat.setText(latitude+"");
-            tvLon.setText(longitude+"");
-        } else {
-
-            tvLon.setText("(Couldn't get the location. Make sure location is enabled on the device)");
+            startActivity(gpsOptionsIntent);
         }
+        else
+        {
+            //
+            mLastLocation = FusedLocationApi
+                    .getLastLocation(mGoogleApiClient);
+
+            if (mLastLocation != null) {
+                double latitude = mLastLocation.getLatitude();
+                double longitude = mLastLocation.getLongitude();
+
+                tvLat.setText(latitude + "");
+                tvLon.setText(longitude + "");
+            } else {
+
+                tvLon.setText("(Couldn't get the location. Make sure location is enabled on the device)");
+            }
+        }
+    }
+
+    /**
+     * Creating location request object
+     * */
+    protected void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FATEST_INTERVAL);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setSmallestDisplacement(DISPLACEMENT); // 10 meters
+    }
+
+    /**
+     * Method to toggle periodic location updates
+     * */
+    private void togglePeriodicLocationUpdates() {
+        if (!mRequestingLocationUpdates) {
+            // Changing the button text
+            btnLocUpdates
+                    .setText("Stop Loc Updates");
+
+            mRequestingLocationUpdates = true;
+
+            // Starting the location updates
+            startLocationUpdates();
+
+            Log.d("TOGGLE TAG", "Periodic location updates started!");
+
+        } else {
+            // Changing the button text
+            btnLocUpdates
+                    .setText("Start Loc Updates");
+
+            mRequestingLocationUpdates = false;
+
+            // Stopping the location updates
+            stopLocationUpdates();
+
+            Log.d("TOGGLE TAG", "Periodic location updates stopped!");
+        }
+    }
+
+    /**
+     * Starting the location updates
+     * */
+    protected void startLocationUpdates() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+
+            tvLat.setText("Loc Updates Not Available");
+            tvLon.setText("Loc Updates Not Available");
+
+            return;
+        }
+        //
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient, mLocationRequest, this);
+
+    }
+
+    /**
+     * Stopping location updates
+     */
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                mGoogleApiClient, this);
     }
 
     /**
@@ -161,17 +298,22 @@ public class LocationActivity extends AppCompatActivity implements GoogleApiClie
     public void onConnected(Bundle bundle) {
         tvLon.setText("Connected!");
         // Once connected with google api,
-        // if gps is not connected ask for gps
 
-        if(!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            Intent gpsOptionsIntent = new Intent(
-                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(gpsOptionsIntent);
-        }
-        else {
+        // if gps is not connected ask for gps
+      //  if(!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        //    Intent gpsOptionsIntent = new Intent(
+          //          android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+           // startActivity(gpsOptionsIntent);
+        //}
+        //else {
             // and then get the location
             displayLocation();
-        }
+            // check location updates variable
+            if (mRequestingLocationUpdates) {
+                startLocationUpdates();
+            }
+
+        //}
     }
 
     @Override
@@ -181,7 +323,20 @@ public class LocationActivity extends AppCompatActivity implements GoogleApiClie
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
         tvLon.setText("Failed!");
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        // Assign the new location
+        mLastLocation = location;
+
+        Toast.makeText(getApplicationContext(), "Location changed!",
+                Toast.LENGTH_SHORT).show();
+
+        // Displaying the new location on UI
+        displayLocation();
     }
 }

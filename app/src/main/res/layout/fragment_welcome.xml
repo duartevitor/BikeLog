@@ -1,0 +1,75 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.vduarte.bikelog.views.fragments.WelcomeFragment"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:background="@android:color/holo_red_dark">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ws_title"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/ws_label_about"
+        android:id="@+id/textView"
+        android:textColor="@android:color/black"
+        android:layout_margin="5dp" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ws_about"
+        android:id="@+id/textView2"
+        android:textColor="@android:color/white"
+        android:layout_margin="5dp"
+        android:gravity="fill" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ws_label_disclaimer"
+        android:id="@+id/textView3"
+        android:textColor="@android:color/black"
+        android:layout_margin="5dp" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ws_disclaimer"
+        android:id="@+id/textView4"
+        android:textColor="@android:color/white"
+        android:layout_margin="5dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal"
+        android:gravity="bottom"
+        android:layout_marginBottom="20dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ws_button"
+            android:id="@+id/btnOk"
+            android:textAlignment="center"
+            android:textSize="12dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/gs_quit"
+            android:id="@+id/btnQuit" />
+    </LinearLayout>
+
+</LinearLayout>

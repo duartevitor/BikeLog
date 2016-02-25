@@ -1,0 +1,68 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.vduarte.bikelog.views.fragments.SettingsFragment"
+    android:orientation="vertical"
+    android:background="#636060">
+
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ss_title"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtName"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:hint="@string/ss_hint_name" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:ems="10"
+        android:id="@+id/txtPhone"
+        android:layout_margin="10dp"
+        android:hint="@string/ss_hint_phone" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/txtRescue"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:text="@string/ss_default_message"
+        android:hint="@string/ss_hint_message" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="bottom|right"
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="left">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/gs_save"
+            android:id="@+id/btnSave"
+            android:textAlignment="center"
+            android:textSize="12dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/gs_close"
+            android:id="@+id/btnQuit" />
+    </LinearLayout>
+</LinearLayout>

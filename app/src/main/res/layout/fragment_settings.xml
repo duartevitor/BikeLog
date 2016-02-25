@@ -26,7 +26,7 @@
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:inputType="phone"
+        android:inputType="phone|numberDecimal"
         android:ems="10"
         android:id="@+id/txtPhone"
         android:layout_margin="10dp"
@@ -41,7 +41,9 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
         android:text="@string/ss_default_message"
-        android:hint="@string/ss_hint_message" />
+        android:hint="@string/ss_hint_message"
+        android:maxLength="120"
+        android:maxLines="4" />
 
     <EditText
         android:layout_width="match_parent"

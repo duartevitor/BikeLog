@@ -30,6 +30,8 @@
     <string name="ss_hint_phone">SOS Phone Number Here</string>
     <string name="ss_hint_message">Your rescue message here!</string>
     <string name="ss_default_message">Please help me, im in trouble! Here are my coordinates:</string>
+    <string name="ss_hint_updateInterval">Update interval (seconds) here!</string>
+    <string name="ss_checkbox_text">Autoupdate location</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

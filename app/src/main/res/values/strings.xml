@@ -17,7 +17,11 @@
     progress and will let you upload to your preferred applications
     such as endomondo, strava etc and keep you safe in the process!</string>
     <string name="ws_label_disclaimer">Disclaimer</string>
-    <string name="ws_disclaimer">This is a disclaimer!</string>
+    <string name="ws_disclaimer">Copyright is the primary intellectual property
+        right protecting websites. This is a free copyright notice template,
+        designed for inclusion on a website. It includes an assertion of copyright
+        ownership, as well as provisions concerning the licensing of website copyright,
+        the infringement of website copyright materials, and copyright notifications.</string>
     <string name="ws_button">I Understand and Want to Continue</string>
     <string name="ws_quit">Are you sure you want to quit and give up already?</string>
     <!-- Settings Screen Strings all start with ss_<name> -->

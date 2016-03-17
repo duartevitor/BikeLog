@@ -47,7 +47,8 @@
         android:text="@string/ws_disclaimer"
         android:id="@+id/textView4"
         android:textColor="@android:color/white"
-        android:layout_margin="5dp" />
+        android:layout_margin="5dp"
+        android:gravity="fill_horizontal|left" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -60,16 +61,17 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/gs_quit"
+            android:id="@+id/btnQuit" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/ws_button"
             android:id="@+id/btnOk"
             android:textAlignment="center"
             android:textSize="12dp" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/gs_quit"
-            android:id="@+id/btnQuit" />
     </LinearLayout>
 
 </LinearLayout>

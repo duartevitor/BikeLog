@@ -39,6 +39,7 @@
             setContentView(R.layout.activity_main);
 
             // TODO initial checks with saved definitions etc...
+            // Commit
             switchView(BikeLogConstants.SCREEN_WELCOME);
         }
 

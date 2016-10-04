@@ -26,8 +26,8 @@
     <string name="ws_quit">Are you sure you want to quit and give up already?</string>
     <!-- Settings Screen Strings all start with ss_<name> -->
     <string name="ss_title">BikeLog User Profile</string>
-    <string name="ss_hint_name">Your Name Here</string>
-    <string name="ss_hint_phone">SOS Phone Number Here</string>
+    <string name="ss_hint_name">(*)Your Name Here</string>
+    <string name="ss_hint_phone">(*)SOS Phone Number Here</string>
     <string name="ss_hint_message">Your rescue message here!</string>
     <string name="ss_default_message">Please help me, im in trouble! Here are my coordinates:</string>
     <string name="ss_hint_updateInterval">Update interval (seconds) here!</string>

@@ -25,6 +25,7 @@
     import com.vduarte.bikelog.constants.BikeLogConstants;
     import com.vduarte.bikelog.interfaces.OnTimerTick;
     import com.vduarte.bikelog.views.LocationActivity;
+    import com.vduarte.bikelog.views.fragments.ActivityFragment;
     import com.vduarte.bikelog.views.fragments.SettingsFragment;
     import com.vduarte.bikelog.views.fragments.WelcomeFragment;
 
@@ -81,11 +82,13 @@
                     loadCustomFragment(new SettingsFragment());
 
                     break;
+                case BikeLogConstants.SCREEN_ACTIVITY:
+
+                    loadCustomFragment(new ActivityFragment());
+
+                    break;
             }
         }
-
-
-
 
 
 

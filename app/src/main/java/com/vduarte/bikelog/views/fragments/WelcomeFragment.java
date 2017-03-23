@@ -50,8 +50,10 @@ public class WelcomeFragment extends Fragment implements View.OnClickListener {
                 ((MainActivity)getActivity()).switchView(BikeLogConstants.SCREEN_SETTINGS);
                 break;
             case R.id.btnQuit:
-                // show quit dialog and act upon button
+                // show quit dialog ( ? ) and act upon button
                 Toast.makeText(getActivity(),"quiiiitiiingg!!!",Toast.LENGTH_SHORT).show();
+
+                this.getActivity().finishAffinity();
                 break;
         }
     }

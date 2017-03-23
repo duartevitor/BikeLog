@@ -46,19 +46,20 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
 
         switch (v.getId()){
             case R.id.btnSave:
+                String checkString = checkRequisites();
                 // if all requisite data is inserted then save and load next view -->
-                if(checkRequisites().equals("")){
+                if(checkString.equals("")){
                     Toast.makeText(getActivity(),"Lets Continue.",Toast.LENGTH_SHORT).show();
+                    ((MainActivity)getActivity()).switchView(BikeLogConstants.SCREEN_ACTIVITY);
                 }else{
                     // show need fields dialog and act upon button
-                    Toast.makeText(getActivity(),checkRequisites(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),checkString,Toast.LENGTH_SHORT).show();
                 }
 
-                // ((MainActivity)getActivity()).switchView(BikeLogConstants.SCREEN_SETTINGS);
                 break;
             case R.id.btnQuit:
-                // show quit dialog and act upon button
-                Toast.makeText(getActivity(),"quiiiitiiingg!!!",Toast.LENGTH_SHORT).show();
+                // returns to welcomes
+                ((MainActivity)getActivity()).switchView(BikeLogConstants.SCREEN_WELCOME);
                 break;
         }
     }
